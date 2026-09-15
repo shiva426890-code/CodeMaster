@@ -1,0 +1,901 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeMaster Academy</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #f5f7fb;
+  --card: #ffffff;
+  --text: #182230;
+  --muted: #7c8798;
+  --border: #e9edf4;
+  --primary: #6657f5;
+  --primary-light: #efedff;
+  --cyan: #13b8c8;
+  --success: #22b573;
+  --warning: #ffad32;
+  --sidebar: #111827;
+  --sidebar-text: #aab4c7;
+  --shadow: 0 10px 35px rgba(30, 41, 59, .06);
+}
+
+.dark {
+  --bg: #0b1120;
+  --card: #151e2f;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --border: #263247;
+  --primary-light: #29264d;
+  --sidebar: #080d18;
+  --sidebar-text: #aab4c7;
+  --shadow: 0 10px 35px rgba(0,0,0,.2);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: Inter, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: .3s;
+}
+
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; border: 0; }
+a { text-decoration: none; color: inherit; }
+
+.app { display: flex; min-height: 100vh; }
+
+/* SIDEBAR */
+.sidebar {
+  width: 250px;
+  background: var(--sidebar);
+  color: white;
+  padding: 26px 16px;
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 100;
+  transition: transform .3s;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0 12px 38px;
+}
+
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #7567ff, #18c5d4);
+  font-size: 19px;
+}
+
+.section-label {
+  color: #65728a;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  margin: 25px 12px 10px;
+  text-transform: uppercase;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  color: var(--sidebar-text);
+  font-size: 13px;
+  margin-bottom: 4px;
+  transition: .2s;
+}
+
+.nav-item:hover, .nav-item.active {
+  background: rgba(102,87,245,.2);
+  color: white;
+}
+
+.nav-item.active { border-left: 3px solid #7668ff; }
+
+.nav-icon { width: 20px; text-align: center; font-size: 17px; }
+
+.sidebar-bottom {
+  position: absolute;
+  bottom: 25px;
+  left: 16px;
+  right: 16px;
+}
+
+.upgrade {
+  background: linear-gradient(135deg, #24214f, #172b42);
+  border: 1px solid #393563;
+  border-radius: 15px;
+  padding: 16px;
+  margin-bottom: 22px;
+}
+
+.upgrade h4 { font-size: 12px; margin-bottom: 6px; }
+.upgrade p { color: #8e9ab1; font-size: 11px; line-height: 1.5; margin-bottom: 12px; }
+.upgrade button {
+  background: #7668ff;
+  color: white;
+  border-radius: 7px;
+  padding: 8px 12px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* MAIN */
+.main { margin-left: 250px; width: calc(100% - 250px); }
+
+.topbar {
+  height: 74px;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 38px;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 10px 15px;
+  border-radius: 9px;
+  width: 300px;
+}
+
+.search input {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  width: 100%;
+  font-size: 12px;
+}
+
+.top-actions { display: flex; align-items: center; gap: 20px; }
+.icon-btn { background: transparent; color: var(--muted); font-size: 19px; }
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#ffb36b,#f46f9b);
+  color: white;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.content { padding: 32px 38px; max-width: 1600px; }
+
+.page { display: none; animation: fadeIn .35s ease; }
+.page.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.page-header h1 { font-size: 25px; letter-spacing: -.7px; }
+.page-header p { color: var(--muted); font-size: 13px; margin-top: 6px; }
+
+.btn {
+  border-radius: 9px;
+  padding: 11px 17px;
+  font-size: 12px;
+  font-weight: 700;
+  transition: .2s;
+}
+
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 18px #6657f533; }
+.btn-outline { border: 1px solid var(--border); background: var(--card); color: var(--text); }
+
+/* WELCOME */
+.welcome {
+  background: linear-gradient(115deg,#171c3d,#29265d 60%,#1c6277);
+  border-radius: 18px;
+  color: white;
+  padding: 30px 34px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.welcome:after {
+  content: "</>";
+  position: absolute;
+  right: 80px;
+  font-size: 150px;
+  font-family: monospace;
+  font-weight: bold;
+  color: rgba(255,255,255,.035);
+}
+
+.welcome h1 { font-size: 23px; margin-bottom: 9px; }
+.welcome p { font-size: 12px; color: #bac4e5; margin-bottom: 18px; }
+.welcome .btn { background: white; color: #29265d; }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 17px;
+  margin-bottom: 25px;
+}
+
+.stat-card, .card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+}
+
+.stat-card { padding: 19px; }
+.stat-top { display: flex; justify-content: space-between; color: var(--muted); font-size: 11px; }
+.stat-icon {
+  width: 35px; height: 35px;
+  border-radius: 9px;
+  display: grid; place-items: center;
+  font-size: 17px;
+}
+.stat-card h2 { font-size: 23px; margin: 13px 0 5px; }
+.stat-card small { font-size: 10px; color: var(--success); }
+
+/* GRID */
+.grid-2 { display: grid; grid-template-columns: 1.5fr 1fr; gap: 22px; }
+.card { padding: 22px; margin-bottom: 22px; }
+.card-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.card-title h3 { font-size: 14px; }
+.card-title a { color: var(--primary); font-size: 11px; font-weight: 600; }
+
+/* COURSE */
+.course {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--border);
+}
+.course:last-child { border: 0; }
+.course-icon {
+  width: 45px; height: 45px;
+  display: grid; place-items: center;
+  border-radius: 11px;
+  font-weight: 800;
+  font-size: 18px;
+}
+.course-info { flex: 1; }
+.course-info h4 { font-size: 12px; margin-bottom: 6px; }
+.course-info p { font-size: 10px; color: var(--muted); }
+.progress {
+  height: 5px;
+  background: var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 9px;
+}
+.progress span { display: block; height: 100%; border-radius: 10px; background: var(--primary); }
+.course-percent { font-size: 11px; color: var(--muted); }
+
+/* ACTIVITY */
+.activity { display: flex; gap: 12px; margin-bottom: 19px; }
+.activity-dot {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: grid; place-items: center; font-size: 14px;
+}
+.activity h4 { font-size: 11px; margin-bottom: 4px; }
+.activity p { color: var(--muted); font-size: 10px; }
+.activity time { color: var(--muted); font-size: 9px; display: block; margin-top: 4px; }
+
+/* LANGUAGES */
+.language-tabs { display: flex; gap: 10px; margin-bottom: 23px; flex-wrap: wrap; }
+.tab {
+  padding: 9px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 11px;
+  cursor: pointer;
+}
+.tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+.language-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 17px;
+}
+.language-card { padding: 20px; }
+.lang-head { display: flex; justify-content: space-between; align-items: center; }
+.lang-logo {
+  width: 43px; height: 43px; border-radius: 11px;
+  display: grid; place-items: center;
+  font-weight: 800; font-size: 15px;
+}
+.difficulty { font-size: 9px; padding: 5px 8px; border-radius: 20px; }
+.easy { background: #e8f8ef; color: #1d9c5e; }
+.medium { background: #fff4df; color: #d89016; }
+.hard { background: #ffe9ed; color: #e34e6e; }
+.language-card h3 { font-size: 14px; margin: 17px 0 7px; }
+.language-card p { color: var(--muted); font-size: 10px; line-height: 1.6; min-height: 32px; }
+.language-meta { display: flex; justify-content: space-between; color: var(--muted); font-size: 10px; margin: 16px 0 8px; }
+.language-card .progress { margin-bottom: 16px; }
+
+/* ROADMAP */
+.roadmap-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+.roadmap { padding: 22px; }
+.roadmap-icon { font-size: 28px; margin-bottom: 14px; }
+.roadmap h3 { font-size: 14px; margin-bottom: 7px; }
+.roadmap p { font-size: 11px; color: var(--muted); line-height: 1.6; margin-bottom: 15px; }
+.roadmap-steps { display: flex; align-items: center; gap: 4px; }
+.step { height: 5px; flex: 1; background: var(--border); border-radius: 5px; }
+.step.done { background: var(--primary); }
+
+/* CHALLENGES */
+.challenge-list { display: grid; gap: 13px; }
+.challenge {
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 17px;
+}
+.challenge-icon {
+  width: 42px; height: 42px; border-radius: 10px;
+  background: var(--primary-light); color: var(--primary);
+  display: grid; place-items: center; font-size: 18px;
+}
+.challenge-main { flex: 1; }
+.challenge h3 { font-size: 13px; margin-bottom: 7px; }
+.challenge p { color: var(--muted); font-size: 10px; }
+.challenge-right { text-align: right; }
+.xp { color: var(--warning); font-size: 11px; font-weight: 700; display: block; margin-bottom: 8px; }
+
+/* PLAYGROUND */
+.playground {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.editor, .output {
+  background: #101827;
+  border-radius: 13px;
+  overflow: hidden;
+  border: 1px solid #263247;
+}
+.editor-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 16px; color: #9aa8be; font-size: 11px;
+  border-bottom: 1px solid #263247;
+}
+.editor textarea {
+  width: 100%; height: 390px;
+  background: #101827; color: #c9d4e8;
+  border: 0; outline: 0; resize: none;
+  padding: 20px;
+  font: 13px/1.8 "JetBrains Mono", monospace;
+}
+.output-body { padding: 20px; color: #aebbd0; min-height: 390px; font: 12px "JetBrains Mono", monospace; white-space: pre-wrap; }
+.output-title { color: #22c997; margin-bottom: 15px; }
+
+/* PROFILE */
+.profile-header {
+  display: flex; align-items: center; gap: 20px;
+  padding: 28px;
+}
+.big-avatar {
+  width: 76px; height: 76px; border-radius: 22px;
+  background: linear-gradient(135deg,#ffb36b,#f46f9b);
+  display: grid; place-items: center; color: white;
+  font-size: 24px; font-weight: 800;
+}
+.profile-header h2 { font-size: 20px; margin-bottom: 6px; }
+.profile-header p { color: var(--muted); font-size: 12px; }
+
+/* MOBILE */
+.mobile-menu { display: none; background: transparent; font-size: 22px; color: var(--text); }
+
+@media(max-width: 1200px) {
+  .language-grid { grid-template-columns: repeat(3,1fr); }
+  .stats { grid-template-columns: repeat(2,1fr); }
+}
+@media(max-width: 900px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; width: 100%; }
+  .mobile-menu { display: block; }
+  .topbar { padding: 0 20px; }
+  .content { padding: 25px 20px; }
+  .grid-2, .playground { grid-template-columns: 1fr; }
+  .language-grid { grid-template-columns: repeat(2,1fr); }
+  .roadmap-grid { grid-template-columns: repeat(2,1fr); }
+}
+@media(max-width: 550px) {
+  .search { width: 160px; }
+  .top-actions { gap: 10px; }
+  .welcome { padding: 25px; }
+  .welcome h1 { font-size: 19px; }
+  .stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat-card { padding: 14px; }
+  .stat-card h2 { font-size: 19px; }
+  .language-grid, .roadmap-grid { grid-template-columns: 1fr; }
+  .page-header { align-items: flex-start; gap: 15px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar" id="sidebar">
+  <div class="logo">
+    <div class="logo-icon">&lt;/&gt;</div>
+    CodeMaster
+  </div>
+
+  <div class="section-label">Main Menu</div>
+
+  <a class="nav-item active" data-page="dashboard">
+    <span class="nav-icon">▦</span> Dashboard
+  </a>
+  <a class="nav-item" data-page="languages">
+    <span class="nav-icon">📚</span> Learn Languages
+  </a>
+  <a class="nav-item" data-page="roadmaps">
+    <span class="nav-icon">🗺</span> Learning Roadmaps
+  </a>
+  <a class="nav-item" data-page="challenges">
+    <span class="nav-icon">⚡</span> Practice Challenges
+  </a>
+  <a class="nav-item" data-page="playground">
+    <span class="nav-icon">⌘</span> Code Playground
+  </a>
+
+  <div class="section-label">Personal</div>
+
+  <a class="nav-item" data-page="achievements">
+    <span class="nav-icon">🏆</span> Achievements
+  </a>
+  <a class="nav-item" data-page="profile">
+    <span class="nav-icon">◉</span> My Profile
+  </a>
+  <a class="nav-item" data-page="settings">
+    <span class="nav-icon">⚙</span> Settings
+  </a>
+
+  <div class="sidebar-bottom">
+    <div class="upgrade">
+      <h4>🚀 Unlock your potential</h4>
+      <p>Get unlimited practice, certificates, and advanced courses.</p>
+      <button>Explore Premium</button>
+    </div>
+    <div class="nav-item">
+      <span class="nav-icon">↪</span> Log out
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+  <div style="display:flex;align-items:center;gap:15px;">
+    <button class="mobile-menu" id="menuBtn">☰</button>
+    <div class="search">
+      🔍 <input placeholder="Search courses, languages..." id="searchInput">
+    </div>
+  </div>
+
+  <div class="top-actions">
+    <button class="icon-btn" id="themeBtn">☾</button>
+    <button class="icon-btn">🔔</button>
+    <div class="avatar">SC</div>
+  </div>
+</header>
+
+<div class="content">
+
+<!-- DASHBOARD -->
+<section class="page active" id="dashboard">
+
+  <div class="welcome">
+    <div>
+      <h1>Good evening, Developer 👋</h1>
+      <p>Keep building your skills. You're doing great!</p>
+      <button class="btn" onclick="navigate('languages')">Continue Learning →</button>
+    </div>
+    <div style="font-size:12px;color:#b9c4e6;z-index:1;">
+      <b style="font-size:27px;color:white;">🔥 12</b><br>
+      Day learning streak
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-top"><span>Total XP</span><div class="stat-icon" style="background:#eeecff;color:#6657f5;">✦</div></div>
+      <h2>2,480</h2><small>↗ 12% this week</small>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><span>Lessons Completed</span><div class="stat-icon" style="background:#e8f8f0;color:#22b573;">✓</div></div>
+      <h2>38</h2><small>↗ 6 this week</small>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><span>Learning Hours</span><div class="stat-icon" style="background:#fff4df;color:#eea226;">◷</div></div>
+      <h2>24.5h</h2><small>↗ 8% this week</small>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><span>Current Rank</span><div class="stat-icon" style="background:#e6f7fa;color:#13aabd;">♛</div></div>
+      <h2>#124</h2><small>↗ Up 18 places</small>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><h3>Continue Learning</h3><a href="#" onclick="navigate('languages')">View all →</a></div>
+
+      <div class="course">
+        <div class="course-icon" style="background:#fff0e5;color:#e87521;">JS</div>
+        <div class="course-info">
+          <h4>JavaScript Fundamentals</h4>
+          <p>Lesson 12 of 24 · Functions & Scope</p>
+          <div class="progress"><span style="width:52%"></span></div>
+        </div>
+        <div class="course-percent">52%</div>
+      </div>
+
+      <div class="course">
+        <div class="course-icon" style="background:#e7f2ff;color:#2779db;">CSS</div>
+        <div class="course-info">
+          <h4>Modern CSS Layouts</h4>
+          <p>Lesson 8 of 18 · CSS Grid</p>
+          <div class="progress"><span style="width:44%;background:#13b8c8"></span></div>
+        </div>
+        <div class="course-percent">44%</div>
+      </div>
+
+      <div class="course">
+        <div class="course-icon" style="background:#e9f8ee;color:#218c50;">PY</div>
+        <div class="course-info">
+          <h4>Python for Beginners</h4>
+          <p>Lesson 5 of 30 · Variables</p>
+          <div class="progress"><span style="width:17%;background:#ffad32"></span></div>
+        </div>
+        <div class="course-percent">17%</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><h3>Recent Activity</h3><a href="#">See all</a></div>
+
+      <div class="activity">
+        <div class="activity-dot" style="background:#e9f8ee;color:#22b573;">✓</div>
+        <div><h4>Completed CSS Grid Challenge</h4><p>Earned 80 XP</p><time>Today, 6:42 PM</time></div>
+      </div>
+      <div class="activity">
+        <div class="activity-dot" style="background:#eeecff;color:#6657f5;">📖</div>
+        <div><h4>Finished JavaScript Functions</h4><p>Lesson completed</p><time>Today, 4:15 PM</time></div>
+      </div>
+      <div class="activity">
+        <div class="activity-dot" style="background:#fff4df;color:#e5a026;">🏆</div>
+        <div><h4>Earned “Quick Learner” badge</h4><p>Achievement unlocked</p><time>Yesterday</time></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><h3>Recommended For You</h3><a href="#" onclick="navigate('languages')">Explore more →</a></div>
+    <div class="language-grid">
+      <div class="language-card card" style="box-shadow:none">
+        <div class="lang-head"><div class="lang-logo" style="background:#fff0e5;color:#e87521;">JS</div><span class="difficulty easy">Beginner</span></div>
+        <h3>JavaScript Essentials</h3><p>Master the language of the web.</p>
+        <button class="btn btn-primary" style="margin-top:15px;width:100%;" onclick="navigate('languages')">Start Course</button>
+      </div>
+      <div class="language-card card" style="box-shadow:none">
+        <div class="lang-head"><div class="lang-logo" style="background:#e9f8ee;color:#218c50;">PY</div><span class="difficulty easy">Beginner</span></div>
+        <h3>Python Basics</h3><p>Start your programming journey.</p>
+        <button class="btn btn-primary" style="margin-top:15px;width:100%;" onclick="navigate('languages')">Start Course</button>
+      </div>
+      <div class="language-card card" style="box-shadow:none">
+        <div class="lang-head"><div class="lang-logo" style="background:#e7f2ff;color:#2779db;">CSS</div><span class="difficulty medium">Intermediate</span></div>
+        <h3>Advanced CSS</h3><p>Build beautiful responsive interfaces.</p>
+        <button class="btn btn-primary" style="margin-top:15px;width:100%;" onclick="navigate('languages')">Start Course</button>
+      </div>
+      <div class="language-card card" style="box-shadow:none">
+        <div class="lang-head"><div class="lang-logo" style="background:#f0eaff;color:#754de8;">SQL</div><span class="difficulty medium">Intermediate</span></div>
+        <h3>SQL Fundamentals</h3><p>Learn databases and data queries.</p>
+        <button class="btn btn-primary" style="margin-top:15px;width:100%;" onclick="navigate('languages')">Start Course</button>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- LANGUAGES -->
+<section class="page" id="languages">
+  <div class="page-header">
+    <div><h1>Explore Languages</h1><p>Choose a language and start building your skills.</p></div>
+    <button class="btn btn-primary">＋ Create Learning Plan</button>
+  </div>
+
+  <div class="language-tabs">
+    <div class="tab active" onclick="filterLang('all',this)">All Languages</div>
+    <div class="tab" onclick="filterLang('beginner',this)">Beginner Friendly</div>
+    <div class="tab" onclick="filterLang('intermediate',this)">Intermediate</div>
+    <div class="tab" onclick="filterLang('advanced',this)">Advanced</div>
+  </div>
+
+  <div class="language-grid" id="languageGrid"></div>
+</section>
+
+<!-- ROADMAPS -->
+<section class="page" id="roadmaps">
+  <div class="page-header">
+    <div><h1>Learning Roadmaps</h1><p>Follow a structured path to reach your career goals.</p></div>
+  </div>
+  <div class="roadmap-grid" id="roadmapGrid"></div>
+</section>
+
+<!-- CHALLENGES -->
+<section class="page" id="challenges">
+  <div class="page-header">
+    <div><h1>Practice Challenges</h1><p>Sharpen your skills through hands-on coding problems.</p></div>
+    <button class="btn btn-primary">Daily Challenge ⚡</button>
+  </div>
+
+  <div class="language-tabs">
+    <div class="tab active">All Challenges</div>
+    <div class="tab">Beginner</div>
+    <div class="tab">Intermediate</div>
+    <div class="tab">Completed</div>
+  </div>
+
+  <div class="challenge-list">
+    <div class="challenge card">
+      <div class="challenge-icon">⌘</div>
+      <div class="challenge-main"><h3>Reverse a String</h3><p>Practice strings, loops, and basic logic.</p></div>
+      <div class="challenge-right"><span class="xp">+50 XP</span><button class="btn btn-outline">Solve Challenge</button></div>
+    </div>
+    <div class="challenge card">
+      <div class="challenge-icon">▦</div>
+      <div class="challenge-main"><h3>Build a Responsive Card</h3><p>Use HTML and CSS to create a responsive component.</p></div>
+      <div class="challenge-right"><span class="xp">+80 XP</span><button class="btn btn-outline">Solve Challenge</button></div>
+    </div>
+    <div class="challenge card">
+      <div class="challenge-icon">ƒ</div>
+      <div class="challenge-main"><h3>Find the Largest Number</h3><p>Use arrays and functions to solve this problem.</p></div>
+      <div class="challenge-right"><span class="xp">+100 XP</span><button class="btn btn-outline">Solve Challenge</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- PLAYGROUND -->
+<section class="page" id="playground">
+  <div class="page-header">
+    <div><h1>Code Playground</h1><p>Experiment, practice, and bring your ideas to life.</p></div>
+    <button class="btn btn-primary" onclick="runCode()">▶ Run Code</button>
+  </div>
+
+  <div class="playground">
+    <div class="editor">
+      <div class="editor-header"><span>● main.js</span><span>JavaScript ▾</span></div>
+      <textarea id="codeEditor">const greeting = "Hello, CodeMaster!";
+console.log(greeting);
+
+const numbers = [1, 2, 3, 4, 5];
+console.log("Sum:", numbers.reduce((a, b) => a + b, 0));</textarea>
+    </div>
+
+    <div class="output">
+      <div class="editor-header"><span>Terminal Output</span><span>Console</span></div>
+      <div class="output-body" id="output"><div class="output-title">▶ Output</div>Click "Run Code" to execute your JavaScript.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROFILE -->
+<section class="page" id="profile">
+  <div class="page-header"><div><h1>My Profile</h1><p>Your learning journey at a glance.</p></div><button class="btn btn-outline">Edit Profile</button></div>
+
+  <div class="card profile-header">
+    <div class="big-avatar">SC</div>
+    <div><h2>Shiva Chouhan</h2><p>Frontend Developer in progress · Joined September 2026</p></div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card"><div class="stat-top"><span>Total XP</span></div><h2>2,480</h2></div>
+    <div class="stat-card"><div class="stat-top"><span>Courses Completed</span></div><h2>4</h2></div>
+    <div class="stat-card"><div class="stat-top"><span>Current Streak</span></div><h2>12 🔥</h2></div>
+    <div class="stat-card"><div class="stat-top"><span>Badges Earned</span></div><h2>8</h2></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><h3>Achievements</h3></div>
+    <div style="display:flex;gap:30px;flex-wrap:wrap;font-size:12px;">
+      <div>🏆<br><br><b>Quick Learner</b></div>
+      <div>🔥<br><br><b>12 Day Streak</b></div>
+      <div>💻<br><br><b>First Project</b></div>
+      <div>⚡<br><br><b>Challenge Master</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section class="page" id="achievements">
+  <div class="page-header"><div><h1>Achievements</h1><p>Celebrate your progress and milestones.</p></div></div>
+  <div class="roadmap-grid">
+    <div class="card roadmap"><div class="roadmap-icon">🔥</div><h3>Consistency Champion</h3><p>Maintain a 7-day learning streak.</p><span style="color:var(--success);font-size:11px;">✓ Unlocked</span></div>
+    <div class="card roadmap"><div class="roadmap-icon">🚀</div><h3>First Launch</h3><p>Complete your first coding project.</p><span style="color:var(--success);font-size:11px;">✓ Unlocked</span></div>
+    <div class="card roadmap"><div class="roadmap-icon">🧠</div><h3>Problem Solver</h3><p>Complete 10 coding challenges.</p><span style="color:var(--warning);font-size:11px;">7 / 10</span></div>
+  </div>
+</section>
+
+<!-- SETTINGS -->
+<section class="page" id="settings">
+  <div class="page-header"><div><h1>Settings</h1><p>Customize your CodeMaster experience.</p></div></div>
+  <div class="card">
+    <div class="card-title"><h3>Appearance</h3></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:15px 0;border-bottom:1px solid var(--border);">
+      <div><b style="font-size:13px;">Dark Mode</b><p style="font-size:11px;color:var(--muted);margin-top:5px;">Switch between light and dark themes.</p></div>
+      <button class="btn btn-primary" onclick="toggleTheme()">Toggle Theme</button>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:15px 0;">
+      <div><b style="font-size:13px;">Email Notifications</b><p style="font-size:11px;color:var(--muted);margin-top:5px;">Receive learning reminders and updates.</p></div>
+      <input type="checkbox" checked>
+    </div>
+  </div>
+</section>
+
+</div>
+</main>
+</div>
+
+<script>
+const languages = [
+  {name:"HTML",abbr:"HTML",type:"beginner",desc:"Build the structure of every website.",lessons:"42 Lessons",color:"#e87521",bg:"#fff0e5",progress:70},
+  {name:"CSS",abbr:"CSS",type:"beginner",desc:"Style beautiful and responsive websites.",lessons:"36 Lessons",color:"#2779db",bg:"#e7f2ff",progress:44},
+  {name:"JavaScript",abbr:"JS",type:"beginner",desc:"Add interactivity to modern websites.",lessons:"48 Lessons",color:"#b88b00",bg:"#fff8d9",progress:52},
+  {name:"Python",abbr:"PY",type:"beginner",desc:"Learn programming with simple syntax.",lessons:"60 Lessons",color:"#218c50",bg:"#e9f8ee",progress:17},
+  {name:"Java",abbr:"JV",type:"intermediate",desc:"Build powerful cross-platform applications.",lessons:"55 Lessons",color:"#d44a35",bg:"#ffebe7",progress:0},
+  {name:"C++",abbr:"C++",type:"intermediate",desc:"Master performance and system programming.",lessons:"45 Lessons",color:"#536bcb",bg:"#e9edff",progress:0},
+  {name:"SQL",abbr:"SQL",type:"intermediate",desc:"Query and manage relational databases.",lessons:"32 Lessons",color:"#754de8",bg:"#f0eaff",progress:0},
+  {name:"TypeScript",abbr:"TS",type:"intermediate",desc:"Write safer JavaScript at scale.",lessons:"30 Lessons",color:"#287ac1",bg:"#e6f3ff",progress:0},
+  {name:"React",abbr:"⚛",type:"advanced",desc:"Create modern component-based interfaces.",lessons:"40 Lessons",color:"#13aabd",bg:"#e5fafc",progress:0},
+  {name:"Node.js",abbr:"N",type:"advanced",desc:"Build fast backend applications.",lessons:"35 Lessons",color:"#4b9b49",bg:"#e9f8e8",progress:0},
+  {name:"Go",abbr:"GO",type:"advanced",desc:"Build scalable and efficient services.",lessons:"28 Lessons",color:"#159bb1",bg:"#e5f8fb",progress:0},
+  {name:"Rust",abbr:"RS",type:"advanced",desc:"Learn safe and high-performance systems.",lessons:"38 Lessons",color:"#d4662f",bg:"#fff0e7",progress:0}
+];
+
+function renderLanguages(filter="all") {
+  const grid = document.getElementById("languageGrid");
+  grid.innerHTML = languages.filter(l => filter==="all" || l.type===filter).map(l => `
+    <div class="card language-card">
+      <div class="lang-head">
+        <div class="lang-logo" style="background:${l.bg};color:${l.color}">${l.abbr}</div>
+        <span class="difficulty ${l.type==="beginner"?"easy":l.type==="intermediate"?"medium":"hard"}">${l.type}</span>
+      </div>
+      <h3>${l.name}</h3>
+      <p>${l.desc}</p>
+      <div class="language-meta"><span>${l.lessons}</span><span>${l.progress}% complete</span></div>
+      <div class="progress"><span style="width:${l.progress}%;background:${l.color}"></span></div>
+      <button class="btn btn-primary" style="width:100%" onclick="alert('Course opened: ${l.name}')">${l.progress ? "Continue Learning" : "Start Learning"} →</button>
+    </div>
+  `).join("");
+}
+
+function filterLang(type, el) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  el.classList.add("active");
+  renderLanguages(type);
+}
+
+const roadmaps = [
+  ["💻","Frontend Developer","Master HTML, CSS, JavaScript, React and modern UI development.",4],
+  ["⚙️","Backend Developer","Learn servers, APIs, databases, and backend architecture.",2],
+  ["🚀","Full Stack Developer","Become a complete developer from frontend to backend.",1],
+  ["🐍","Python Developer","Learn Python, automation, backend, and advanced projects.",3],
+  ["📊","Data Science","Explore Python, statistics, data analysis, and machine learning.",1],
+  ["📱","App Development","Build mobile applications with modern technologies.",0],
+  ["🎮","Game Development","Learn programming fundamentals and game engines.",0],
+  ["🛡️","Cybersecurity","Understand networks, security, and ethical hacking.",0],
+  ["🤖","AI / Machine Learning","Build intelligent applications with data and models.",0]
+];
+
+function renderRoadmaps() {
+  document.getElementById("roadmapGrid").innerHTML = roadmaps.map(r => `
+    <div class="card roadmap">
+      <div class="roadmap-icon">${r[0]}</div>
+      <h3>${r[1]}</h3>
+      <p>${r[2]}</p>
+      <div class="roadmap-steps">${[0,1,2,3,4].map((_,i)=>`<span class="step ${i<r[3]?"done":""}"></span>`).join("")}</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:10px;">${r[3]}/5 milestones completed</div>
+    </div>
+  `).join("");
+}
+
+function navigate(page) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(page).classList.add("active");
+  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+  const nav = document.querySelector(`[data-page="${page}"]`);
+  if(nav) nav.classList.add("active");
+  document.getElementById("sidebar").classList.remove("open");
+  window.scrollTo(0,0);
+}
+
+document.querySelectorAll(".nav-item[data-page]").forEach(item => {
+  item.addEventListener("click", e => {
+    e.preventDefault();
+    navigate(item.dataset.page);
+  });
+});
+
+function toggleTheme() {
+  document.body.classList.toggle("dark");
+  localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+}
+
+function runCode() {
+  const code = document.getElementById("codeEditor").value;
+  const output = document.getElementById("output");
+  let logs = [];
+  const originalLog = console.log;
+  try {
+    console.log = (...args) => logs.push(args.join(" "));
+    new Function(code)();
+    console.log = originalLog;
+    output.innerHTML = `<div class="output-title">▶ Output</div>${logs.join("\\n") || "Code executed successfully."}`;
+  } catch(error) {
+    console.log = originalLog;
+    output.innerHTML = `<div class="output-title" style="color:#ff7272">✕ Error</div>${error.message}`;
+  }
+}
+
+document.getElementById("themeBtn").onclick = toggleTheme;
+document.getElementById("menuBtn").onclick = () => document.getElementById("sidebar").classList.toggle("open");
+
+if(localStorage.getItem("theme")==="dark") document.body.classList.add("dark");
+
+renderLanguages();
+renderRoadmaps();
+</script>
+
+</body>
+</html>
+```
