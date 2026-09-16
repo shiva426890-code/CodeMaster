@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | CodeMaster Academy</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Inter", sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background:
+        radial-gradient(circle at top left, #334155, transparent 35%),
+        linear-gradient(135deg, #0f172a, #1e293b, #312e81);
+      overflow-x: hidden;
+    }
+
+    .background-circle {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(2px);
+      opacity: 0.25;
+      z-index: -1;
+    }
+
+    .circle-one {
+      width: 250px;
+      height: 250px;
+      background: #818cf8;
+      top: -80px;
+      left: -80px;
+    }
+
+    .circle-two {
+      width: 300px;
+      height: 300px;
+      background: #c084fc;
+      right: -100px;
+      bottom: -100px;
+    }
+
+    .login-wrapper {
+      width: 100%;
+      max-width: 1000px;
+      min-height: 600px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+    }
+
+    .login-left {
+      padding: 55px 45px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: white;
+      background: linear-gradient(
+        145deg,
+        rgba(99, 102, 241, 0.35),
+        rgba(30, 41, 59, 0.2)
+      );
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 45px;
+    }
+
+    .brand-icon {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #818cf8, #c084fc);
+      font-size: 24px;
+    }
+
+    .brand h2 {
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .brand span {
+      color: #c4b5fd;
+    }
+
+    .login-left h1 {
+      font-size: clamp(32px, 4vw, 48px);
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .login-left h1 span {
+      color: #a5b4fc;
+    }
+
+    .login-left > p {
+      color: #cbd5e1;
+      line-height: 1.8;
+      font-size: 15px;
+      max-width: 400px;
+      margin-bottom: 35px;
+    }
+
+    .features {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #e2e8f0;
+      font-size: 14px;
+    }
+
+    .feature-icon {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      background: rgba(129, 140, 248, 0.2);
+      color: #a5b4fc;
+    }
+
+    .login-right {
+      background: white;
+      padding: 50px 45px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .login-header {
+      margin-bottom: 30px;
+    }
+
+    .login-header h2 {
+      color: #0f172a;
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .login-header p {
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      color: #334155;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      height: 50px;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 0 45px 0 15px;
+      font-size: 14px;
+      color: #1e293b;
+      outline: none;
+      transition: 0.3s;
+      background: #f8fafc;
+    }
+
+    .input-wrapper input:focus {
+      border-color: #6366f1;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    }
+
+    .input-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 18px;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      color: #64748b;
+      font-size: 17px;
+    }
+
+    .password-toggle:hover {
+      color: #4f46e5;
+    }
+
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      font-size: 13px;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #64748b;
+      cursor: pointer;
+    }
+
+    .remember-me input {
+      accent-color: #6366f1;
+      cursor: pointer;
+    }
+
+    .forgot-link {
+      color: #6366f1;
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .forgot-link:hover {
+      text-decoration: underline;
+    }
+
+    .login-button {
+      width: 100%;
+      height: 50px;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .login-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+    }
+
+    .login-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+      transform: none;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #94a3b8;
+      font-size: 12px;
+      margin: 25px 0;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: #e2e8f0;
+    }
+
+    .social-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .social-button {
+      height: 45px;
+      border: 1px solid #e2e8f0;
+      border-radius: 9px;
+      background: white;
+      color: #475569;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .social-button:hover {
+      background: #f8fafc;
+      border-color: #c7d2fe;
+    }
+
+    .signup-text {
+      text-align: center;
+      margin-top: 25px;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    .signup-text a {
+      color: #6366f1;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .signup-text a:hover {
+      text-decoration: underline;
+    }
+
+    .message {
+      display: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .message.error {
+      display: block;
+      background: #fef2f2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+    }
+
+    .message.success {
+      display: block;
+      background: #f0fdf4;
+      color: #16a34a;
+      border: 1px solid #bbf7d0;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background: rgba(15, 23, 42, 0.7);
+      z-index: 10;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 400px;
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal h3 {
+      color: #0f172a;
+      margin-bottom: 10px;
+    }
+
+    .modal p {
+      color: #64748b;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .modal input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      outline: none;
+      margin-bottom: 15px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .modal-actions button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .cancel-button {
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .reset-button {
+      background: #6366f1;
+      color: white;
+    }
+
+    @media (max-width: 800px) {
+      .login-wrapper {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+      }
+
+      .login-left {
+        padding: 35px;
+      }
+
+      .login-left h1 {
+        font-size: 34px;
+      }
+
+      .brand {
+        margin-bottom: 25px;
+      }
+
+      .features {
+        display: none;
+      }
+
+      .login-right {
+        padding: 35px;
+      }
+    }
+
+    @media (max-width: 450px) {
+      body {
+        padding: 10px;
+      }
+
+      .login-left,
+      .login-right {
+        padding: 28px 22px;
+      }
+
+      .login-header h2 {
+        font-size: 25px;
+      }
+
+      .social-buttons {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="background-circle circle-one"></div>
+  <div class="background-circle circle-two"></div>
+
+  <main class="login-wrapper">
+
+    <!-- Left Section -->
+    <section class="login-left">
+      <div class="brand">
+        <div class="brand-icon">{"</>"}</div>
+        <h2>Code<span>Master</span></h2>
+      </div>
+
+      <h1>Continue your<br><span>coding journey.</span></h1>
+
+      <p>
+        Sign in to access your courses, track your progress,
+        complete challenges, and become a better developer.
+      </p>
+
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">✓</div>
+          <span>Track your learning progress</span>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">✓</div>
+          <span>Access interactive coding lessons</span>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">✓</div>
+          <span>Earn achievements and certificates</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Section -->
+    <section class="login-right">
+
+      <div class="login-header">
+        <h2>Welcome back!</h2>
+        <p>Enter your details to access your account.</p>
+      </div>
+
+      <div id="message" class="message"></div>
+
+      <form id="loginForm">
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+
+          <div class="input-wrapper">
+            <input
+              type="email"
+              id="email"
+              placeholder="you@example.com"
+              autocomplete="email"
+              required
+            />
+            <span class="input-icon">✉</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+
+          <div class="input-wrapper">
+            <input
+              type="password"
+              id="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+            />
+
+            <button
+              type="button"
+              class="password-toggle"
+              id="togglePassword"
+              aria-label="Show password"
+            >
+              👁
+            </button>
+          </div>
+        </div>
+
+        <div class="form-options">
+          <label class="remember-me">
+            <input type="checkbox" id="rememberMe" />
+            <span>Remember me</span>
+          </label>
+
+          <a class="forgot-link" id="forgotPassword">
+            Forgot password?
+          </a>
+        </div>
+
+        <button type="submit" class="login-button" id="loginButton">
+          Sign In
+        </button>
+
+      </form>
+
+      <div class="divider">
+        OR CONTINUE WITH
+      </div>
+
+      <div class="social-buttons">
+        <button class="social-button" type="button" id="googleButton">
+          🌐 Google
+        </button>
+
+        <button class="social-button" type="button" id="githubButton">
+          💻 GitHub
+        </button>
+      </div>
+
+      <div class="signup-text">
+        Don't have an account?
+        <a href="signup.html">Create account</a>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- Forgot Password Modal -->
+  <div class="modal-overlay" id="forgotModal">
+    <div class="modal">
+      <h3>Reset your password</h3>
+
+      <p>
+        Enter your email address and we will send you instructions
+        to reset your password.
+      </p>
+
+      <input
+        type="email"
+        id="resetEmail"
+        placeholder="Enter your email"
+      />
+
+      <div class="modal-actions">
+        <button class="cancel-button" id="cancelModal">
+          Cancel
+        </button>
+
+        <button class="reset-button" id="resetButton">
+          Send Link
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById("loginForm");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const rememberMe = document.getElementById("rememberMe");
+    const togglePassword = document.getElementById("togglePassword");
+    const loginButton = document.getElementById("loginButton");
+    const message = document.getElementById("message");
+
+    const forgotPassword = document.getElementById("forgotPassword");
+    const forgotModal = document.getElementById("forgotModal");
+    const cancelModal = document.getElementById("cancelModal");
+    const resetButton = document.getElementById("resetButton");
+    const resetEmail = document.getElementById("resetEmail");
+
+    function showMessage(text, type) {
+      message.textContent = text;
+      message.className = "message " + type;
+    }
+
+    function clearMessage() {
+      message.textContent = "";
+      message.className = "message";
+    }
+
+    // Show or hide password
+    togglePassword.addEventListener("click", function () {
+      if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        togglePassword.textContent = "🙈";
+        togglePassword.setAttribute("aria-label", "Hide password");
+      } else {
+        passwordInput.type = "password";
+        togglePassword.textContent = "👁";
+        togglePassword.setAttribute("aria-label", "Show password");
+      }
+    });
+
+    // Load remembered email
+    const savedEmail = localStorage.getItem("rememberedEmail");
+
+    if (savedEmail) {
+      emailInput.value = savedEmail;
+      rememberMe.checked = true;
+    }
+
+    // Login form submit
+    loginForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      clearMessage();
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      if (!email || !password) {
+        showMessage("Please fill in all fields.", "error");
+        return;
+      }
+
+      if (!email.includes("@") || !email.includes(".")) {
+        showMessage("Please enter a valid email address.", "error");
+        return;
+      }
+
+      if (password.length < 6) {
+        showMessage(
+          "Password must contain at least 6 characters.",
+          "error"
+        );
+        return;
+      }
+
+      if (rememberMe.checked) {
+        localStorage.setItem("rememberedEmail", email);
+      } else {
+        localStorage.removeItem("rememberedEmail");
+      }
+
+      loginButton.disabled = true;
+      loginButton.textContent = "Signing in...";
+
+      // Demo login delay
+      setTimeout(function () {
+        showMessage("Login successful! Redirecting...", "success");
+
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userEmail", email);
+
+        setTimeout(function () {
+          window.location.href = "index.html";
+        }, 1200);
+      }, 1000);
+    });
+
+    // Forgot password modal
+    forgotPassword.addEventListener("click", function () {
+      forgotModal.classList.add("active");
+      resetEmail.value = emailInput.value;
+      resetEmail.focus();
+    });
+
+    cancelModal.addEventListener("click", function () {
+      forgotModal.classList.remove("active");
+    });
+
+    forgotModal.addEventListener("click", function (event) {
+      if (event.target === forgotModal) {
+        forgotModal.classList.remove("active");
+      }
+    });
+
+    resetButton.addEventListener("click", function () {
+      const email = resetEmail.value.trim();
+
+      if (!email || !email.includes("@")) {
+        alert("Please enter a valid email address.");
+        return;
+      }
+
+      alert("Password reset instructions would be sent to " + email);
+      forgotModal.classList.remove("active");
+    });
+
+    // Social buttons demo
+    document.getElementById("googleButton").addEventListener("click", function () {
+      alert("Google login will be connected after adding authentication.");
+    });
+
+    document.getElementById("githubButton").addEventListener("click", function () {
+      alert("GitHub login will be connected after adding authentication.");
+    });
+  </script>
+
+</body>
+</html>
